@@ -1,0 +1,13 @@
+# compose for nginx
+version: "3.9"
+
+services: 
+    jekyll:
+        build:
+            context: ..
+            dockerfile: docker/jekyll.Dockerfile
+        image: jekyll1
+        ports:
+            - "8080:80"
+        environment: 
+            - NGINX_PORT=80
