@@ -6,7 +6,7 @@ services:
         build:
             context: ..
             dockerfile: docker/jekyll.Dockerfile
-        image: jekyll1
+        image: ghcr.io/thinkland/jekyll1:latest
         ports:
             - "8080:80"
         environment: 
