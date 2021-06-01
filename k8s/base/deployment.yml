@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ministake2
+spec:
+  selector:
+    matchLabels:
+      app: ministake2
+  template:
+    metadata:
+      labels:
+        app: ministake2
+    spec:
+      containers:
+      - name: ministake2
+        image: jekyll1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+
+
