@@ -4,7 +4,7 @@ resources:
 - ./../base/
 - namespace.yml
 - ingress.yml
-namespace: dev
+namespace: prod
 images:
 - name: jekyll1
   newName: ghcr.io/thinkland/jekyll1
