@@ -3,7 +3,8 @@ kind: Kustomization
 resources:
 - ./../base/
 - namespace.yml
-- ingress.yml
+- ingress-tls.yml
+# - ingress.yml
 namespace: prod
 images:
 - name: jekyll1

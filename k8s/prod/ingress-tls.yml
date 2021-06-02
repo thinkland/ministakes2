@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    # cert-manager.io/cluster-issuer: letsencrypt-prod   #  TODO
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+  name: mini-ing-tls
+  namespace: prod
+spec:
+  rules:
+  - host: ministake2.thinkland.de
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: ministake2
+            port:
+              number: 8080
+  tls: # < placing a host in the TLS config will determine what ends up in the cert's subjectAltNames
+  - hosts:
+    - ministake2.thinkland.de
+    secretName: mini-ing-cert # < cert-manager will store the created certificate in this secret.
