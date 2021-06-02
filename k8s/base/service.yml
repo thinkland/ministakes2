@@ -7,5 +7,5 @@ spec:
     app: ministake2
   ports:
   - port: 8080
-    targetPort: 8080
+    targetPort: 80
 
