@@ -13,7 +13,3 @@ namespace: prod
 replicas:
 - count: 2
   name: ministake2
-images:
-- name: jekyll1
-  newName: ghcr/jekyll1
-  newTag: latest
