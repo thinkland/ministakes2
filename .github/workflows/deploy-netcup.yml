@@ -52,6 +52,8 @@ jobs:
     - name: Deploy
       run: |-
         cd k8s/prod
+        pwd
+        ls -la
         ./kustomize edit set image jekyll1=$REGISTRY/$GH_USER/$IMAGE_NAME:$IMAGE_TAG
         ./kustomize build
         kubectl get all -o wide
