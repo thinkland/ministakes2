@@ -6,10 +6,10 @@ resources:
 - ingress-tls.yml
 # - ingress.yml
 namespace: prod
-images:
-- name: jekyll1
-  newName: ghcr.io/thinkland/jekyll1
-  newTag: latest
+# images:
+# - name: jekyll1
+#   newName: ghcr.io/thinkland/jekyll1
+#   newTag: latest
 replicas:
 - count: 2
   name: ministake2
