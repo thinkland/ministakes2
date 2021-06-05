@@ -53,6 +53,7 @@ jobs:
       run: |-
         cd k8s/prod
         pwd
+        cp ../../kustomize .
         ls -la
         ./kustomize edit set image jekyll1=$REGISTRY/$GH_USER/$IMAGE_NAME:$IMAGE_TAG
         ./kustomize build
