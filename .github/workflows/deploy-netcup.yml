@@ -68,9 +68,7 @@ jobs:
     - name: Deploy
       run: |-
         cd k8s/prod
-        cp ../../kustomize .
-        ls -la
-        ./kustomize edit set image jekyll1=$IMAGE_FULL
-        ./kustomize build | kubectl apply -f -
+        ../../kustomize edit set image jekyll1=$IMAGE_FULL
+        ../../kustomize build | kubectl apply -f -
         kubectl get all -o wide -n prod
         
