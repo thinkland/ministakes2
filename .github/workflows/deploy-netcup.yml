@@ -6,8 +6,8 @@ name: Build and Deploy to Netcup
 on: [push]
 
 env:
-  REGISTRY: ghcr.io
   GH_USER: ${{ github.actor }}
+  REG_NAME: ghcr.io
   REG_PASS: ${{ secrets.GHCR_PAT_TOKEN }}
   IMAGE_NAME: jekyll1
   IMAGE_TAG: "build-${{ github.run_number }}"
@@ -18,8 +18,8 @@ env:
 
 
 jobs:
-  setup-build-publish-deploy:
-    name: Build, Publish, and Deploy
+  build:
+    name: Build and Publish
     runs-on: ubuntu-latest
     environment: production
 
@@ -30,7 +30,7 @@ jobs:
     # Docker login
     - name: Log in to GitHub Docker Registry
       run: |-
-        echo $REG_PASS | docker login $REGISTRY -u $GH_USER --password-stdin
+        echo $REG_PASS | docker login $REG_NAME -u $GH_USER --password-stdin
 
     # Build the Docker image
     - name: Build in Docker
@@ -44,6 +44,16 @@ jobs:
     - name: Publish to Container Registry
       run: |-
         docker push "$IMAGE_FULL"
+
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
 
     # Set K8s Credentials:
     - name: Get K8s credentials
