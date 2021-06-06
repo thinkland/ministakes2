@@ -11,7 +11,7 @@ env:
   REG_PASS: ${{ secrets.GHCR_PAT_TOKEN }}
   IMAGE_NAME: jekyll1
   IMAGE_TAG: latest   # TODO
-  IMAGE_FULL: ghcr.io/${{ github.actor }}/jekyll1:latest   # env not work
+  IMAGE_FULL: ghcr.io/${{ github.actor }}/jekyll1:latest   # env vars do not work?
   K8S_CLUSTER_SERVER: https://202.61.228.230:16443
   K8S_CLUSTER_CERT:   ${{ secrets.K8S_CLUSTER_CERT }}
   K8S_USER_TOKEN:     ${{ secrets.K8S_USER_TOKEN }}
@@ -70,7 +70,7 @@ jobs:
         cd k8s/prod
         cp ../../kustomize .
         ls -la
-        ./kustomize edit set image jekyll1=$REGISTRY/$GH_USER/$IMAGE_NAME:$IMAGE_TAG
+        ./kustomize edit set image jekyll1=$IMAGE_FULL
         ./kustomize build | kubectl apply -f -
         kubectl get all -o wide -n prod
         
