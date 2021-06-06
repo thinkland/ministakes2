@@ -6,6 +6,5 @@ resources:
 - ingress-tls.yml
 # - ingress.yml
 namespace: prod
-replicas:
-- count: 2
-  name: ministake2
+patchesStrategicMerge:
+- set-replicas.yml
