@@ -11,6 +11,10 @@ env:
   REG_PASS: ${{ secrets.GHCR_PAT_TOKEN }}
   IMAGE_NAME: jekyll1
   IMAGE_TAG: latest   # TODO
+  K8S_CLUSTER_SERVER: https://202.61.228.230:16443
+  K8S_CLUSTER_CERT:   ${{ secrets.K8S_CLUSTER_CERT }}
+  K8S_USER_TOKEN:     ${{ secrets.K8S_USER_TOKEN }}
+
 
 jobs:
   setup-build-publish-deploy:
@@ -40,6 +44,18 @@ jobs:
       run: |-
         docker push "$REGISTRY/$GH_USER/$IMAGE_NAME:$IMAGE_TAG"
 
+    # Set K8s Credentials:
+    - name: Get K8s credentials
+      run: |-
+        kubectl config view
+        kubectl config set-cluster     netcup-cluster
+        kubectl config set    clusters.netcup-cluster.server $K8S_CLUSTER_SERVER
+        kubectl config set    clusters.netcup-cluster.certificate-authority-data $K8S_CLUSTER_CERT
+        kubectl config set-credentials netcup-admin --token=$K8S_USER_TOKEN
+        kubectl config set-context     netcup --user=netcup-admin --cluster=netcup-cluster
+        kubectl config use-context     netcup
+        kubectl config view
+
     # Set up kustomize
     - name: Set up Kustomize
       run: |-
@@ -56,5 +72,6 @@ jobs:
         cp ../../kustomize .
         ls -la
         ./kustomize edit set image jekyll1=$REGISTRY/$GH_USER/$IMAGE_NAME:$IMAGE_TAG
-        ./kustomize build
+        ./kustomize build | kubectl apply -f -
+        kubectl get all -o wide
         
