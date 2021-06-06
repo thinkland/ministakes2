@@ -10,8 +10,8 @@ env:
   GH_USER: ${{ github.actor }}
   REG_PASS: ${{ secrets.GHCR_PAT_TOKEN }}
   IMAGE_NAME: jekyll1
-  IMAGE_TAG: latest   # TODO
-  IMAGE_FULL: ghcr.io/${{ github.actor }}/jekyll1:latest   # env vars do not work?
+  IMAGE_TAG: ${{ github.run_number }}
+  IMAGE_FULL: ghcr.io/${{ github.actor }}/jekyll1:${{ github.run_number }}   # env vars do not work?
   K8S_CLUSTER_SERVER: https://202.61.228.230:16443
   K8S_CLUSTER_CERT:   ${{ secrets.K8S_CLUSTER_CERT }}
   K8S_USER_TOKEN:     ${{ secrets.K8S_USER_TOKEN }}
