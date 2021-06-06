@@ -76,6 +76,7 @@ jobs:
 
     # Deploy images secrets
     - name: Deploy image secrets
+      continue-on-error: true
       run: |-
         kubectl create secret docker-registry regcred \
           --docker-server=$REG_NAME \
