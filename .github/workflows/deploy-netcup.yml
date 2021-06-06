@@ -21,8 +21,6 @@ jobs:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment: production
-    env:
-      IMAGE_FULL: ${{ env.REGISTRY }}/${{ env.GH_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
     steps:
     - name: Checkout
@@ -35,6 +33,8 @@ jobs:
 
     # Build the Docker image
     - name: Build
+      env:
+        IMAGE_FULL: ${{ env.REGISTRY }}/${{ env.GH_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
       run: |-
         docker build \
           --tag "$IMAGE_FULL" \
