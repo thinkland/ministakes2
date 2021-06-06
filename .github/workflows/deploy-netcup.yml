@@ -75,12 +75,12 @@ jobs:
         chmod u+x ./kustomize
 
     # Deploy images secrets
-    - name: Deploy image secrets
-      run: |-
-        kubectl create secret docker-registry regcred \
-          --docker-server=$REG_NAME \
-          --docker-username=$GH_USER \
-          --docker-password=$REG_PASS
+    # - name: Deploy image secrets
+    #   run: |-
+    #     kubectl create secret docker-registry regcred \
+    #       --docker-server=$REG_NAME \
+    #       --docker-username=$GH_USER \
+    #       --docker-password=$REG_PASS
 
     # Deploy the Docker image to the Netcup cluster
     # before with: kubectl rollout status deployment/$DEPLOYMENT_NAME
