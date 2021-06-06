@@ -77,9 +77,9 @@ jobs:
     # Deploy images secrets
     - name: Deploy image secrets
       run: |-
-        kubectl create secret docker-registry regcred
-          --docker-server=$REG_NAME
-          --docker-username=$GH_USER
+        kubectl create secret docker-registry regcred \
+          --docker-server=$REG_NAME \
+          --docker-username=$GH_USER \
           --docker-password=$REG_PASS
 
     # Deploy the Docker image to the Netcup cluster
