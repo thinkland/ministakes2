@@ -11,7 +11,6 @@ env:
   REG_PASS: ${{ secrets.GHCR_PAT_TOKEN }}
   IMAGE_NAME: jekyll1
   IMAGE_TAG: latest   # TODO
-  IMAGE_FULL: ${ REGISTRY }/${ GH_USER }/${ IMAGE_NAME }:${ IMAGE_TAG }
   K8S_CLUSTER_SERVER: https://202.61.228.230:16443
   K8S_CLUSTER_CERT:   ${{ secrets.K8S_CLUSTER_CERT }}
   K8S_USER_TOKEN:     ${{ secrets.K8S_USER_TOKEN }}
@@ -22,6 +21,8 @@ jobs:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment: production
+    env:
+      IMAGE_FULL: ${{ env.REGISTRY }}/${{ env.GH_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
     steps:
     - name: Checkout
