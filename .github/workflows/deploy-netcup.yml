@@ -76,14 +76,16 @@ jobs:
 
     # Deploy images secrets
     - name: Deploy image secrets
-      if: ${{ false }}
-      continue-on-error: true
+      # if: ${{ true }}
+      # continue-on-error: true
       run: |-
         kubectl create secret docker-registry regcred \
           --docker-server=$REG_NAME \
           --docker-username=$GH_USER \
           --docker-password=$REG_PASS \
-          --namespace prod
+          --namespace prod \
+          --dry-run=client --save-config -o yaml \
+          | kubectl apply -f -
 
     # Deploy the Docker image to the Netcup cluster
     # before with: kubectl rollout status deployment/$DEPLOYMENT_NAME
