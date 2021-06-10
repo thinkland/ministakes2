@@ -104,6 +104,7 @@ jobs:
   #############################################################################
   deploy2:
     name: Deploy to Contabo
+    if: ${{ false }}
     needs: [build]
     runs-on: ubuntu-latest
     environment: production
