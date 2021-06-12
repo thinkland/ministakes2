@@ -15,10 +15,6 @@ env:
   K8S_CLUSTER_SERVER_1: https://202.61.228.230:16443
   K8S_CLUSTER_CERT_1:   ${{ secrets.K8S_CLUSTER_CERT }}
   K8S_USER_TOKEN_1:     ${{ secrets.K8S_USER_TOKEN }}
-  K8S_CLUSTER_SERVER_2: https://todo
-  K8S_CLUSTER_CERT_2:   ${{ secrets.K8S_CLUSTER_CERT_2 }}
-  K8S_USER_TOKEN_2:     ${{ secrets.K8S_USER_TOKEN_2 }}
-
 
 jobs:
 
@@ -57,6 +53,8 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     environment: production
+    env:
+      NAMESPACE: prod
 
     steps:
     - name: Checkout
@@ -87,7 +85,7 @@ jobs:
           --docker-server=$REG_NAME \
           --docker-username=$GH_USER \
           --docker-password=$REG_PASS \
-          --namespace prod \
+          --namespace $NAMESPACE \
           --dry-run=client --save-config -o yaml \
           | kubectl apply -f -
 
@@ -95,11 +93,11 @@ jobs:
     # before with: kubectl rollout status deployment/$DEPLOYMENT_NAME
     - name: Deploy to K8s cluster
       run: |-
-        cd k8s/prod
+        cd k8s/prod-netcup
         ../../kustomize edit set image jekyll1=$IMAGE_FULL
         ../../kustomize build | kubectl apply -f -
         ../../kustomize build
-        kubectl get all -o wide -n prod
+        kubectl get all -o wide -n $NAMESPACE
 
   #############################################################################
   deploy2:
@@ -108,6 +106,12 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     environment: production
+    env:
+      K8S_NAMESPACE:      prod
+      K8S_FOLDER:         k8s/prod-contabo
+      K8S_CLUSTER_SERVER: https://194.163.146.71:16443
+      K8S_CLUSTER_CERT:   ${{ secrets.K8S_CLUSTER_CERT_CONTABO }}
+      K8S_USER_TOKEN:     ${{ secrets.K8S_USER_TOKEN_CONTABO }}
 
     steps:
     - name: Checkout
@@ -118,9 +122,9 @@ jobs:
       run: |-
         kubectl config view
         kubectl config set-cluster     contabo-cluster
-        kubectl config set    clusters.contabo-cluster.server                     $K8S_CLUSTER_SERVER_2
-        kubectl config set    clusters.contabo-cluster.certificate-authority-data $K8S_CLUSTER_CERT_2
-        kubectl config set-credentials contabo-admin --token=$K8S_USER_TOKEN_2
+        kubectl config set    clusters.contabo-cluster.server                     $K8S_CLUSTER_SERVER
+        kubectl config set    clusters.contabo-cluster.certificate-authority-data $K8S_CLUSTER_CERT
+        kubectl config set-credentials contabo-admin --token=$K8S_USER_TOKEN
         kubectl config set-context     contabo       --user=contabo-admin --cluster=contabo-cluster
         kubectl config use-context     contabo
         kubectl config view
@@ -138,16 +142,16 @@ jobs:
           --docker-server=$REG_NAME \
           --docker-username=$GH_USER \
           --docker-password=$REG_PASS \
-          --namespace prod \
+          --namespace $K8S_NAMESPACE \
           --dry-run=client --save-config -o yaml \
           | kubectl apply -f -
 
     # Deploy the Docker image to the contabo cluster
     - name: Deploy to K8s cluster
       run: |-
-        cd k8s/prod
+        cd $K8S_FOLDER
         ../../kustomize edit set image jekyll1=$IMAGE_FULL
         ../../kustomize build | kubectl apply -f -
         ../../kustomize build
-        kubectl get all -o wide -n prod
+        kubectl get all -n $K8S_NAMESPACE
 
