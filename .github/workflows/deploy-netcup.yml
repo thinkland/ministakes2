@@ -107,7 +107,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      K8S_NAMESPACE:      prod
+      K8S_NAMESPACE:      mini2-prod
       K8S_FOLDER:         k8s/prod-contabo
       K8S_CLUSTER_SERVER: https://194.163.146.71:16443
       K8S_CLUSTER_CERT:   ${{ secrets.K8S_CONTABO_CLUSTER_CERT }}
