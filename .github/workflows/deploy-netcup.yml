@@ -102,7 +102,7 @@ jobs:
   #############################################################################
   deploy2:
     name: Deploy to Contabo
-    if: ${{ false }}
+    if: ${{ true }}
     needs: [build]
     runs-on: ubuntu-latest
     environment: production
@@ -110,8 +110,8 @@ jobs:
       K8S_NAMESPACE:      prod
       K8S_FOLDER:         k8s/prod-contabo
       K8S_CLUSTER_SERVER: https://194.163.146.71:16443
-      K8S_CLUSTER_CERT:   ${{ secrets.K8S_CLUSTER_CERT_CONTABO }}
-      K8S_USER_TOKEN:     ${{ secrets.K8S_USER_TOKEN_CONTABO }}
+      K8S_CLUSTER_CERT:   ${{ secrets.K8S_CONTABO_CLUSTER_CERT }}
+      K8S_USER_TOKEN:     ${{ secrets.K8S_CONTABO_USER_TOKEN }}
 
     steps:
     - name: Checkout
@@ -138,6 +138,7 @@ jobs:
     # Deploy images secrets
     - name: Deploy image secrets
       run: |-
+        kubectl create namespace $K8S_NAMESPACE
         kubectl create secret docker-registry regcred \
           --docker-server=$REG_NAME \
           --docker-username=$GH_USER \
