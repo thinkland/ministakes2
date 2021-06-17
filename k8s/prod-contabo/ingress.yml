@@ -8,7 +8,7 @@ metadata:
   #   kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: ministake2.thinkland.de   # TODO
+  - host: ministake-contabo.thinkland.de   # TODO
     http:
       paths:
       - pathType: Prefix
