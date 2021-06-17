@@ -138,7 +138,7 @@ jobs:
     # Deploy images secrets
     - name: Deploy image secrets
       run: |-
-        kubectl create namespace $K8S_NAMESPACE
+        kubectl apply -f $K8S_FOLDER/namespace.yml
         kubectl create secret docker-registry regcred \
           --docker-server=$REG_NAME \
           --docker-username=$GH_USER \
