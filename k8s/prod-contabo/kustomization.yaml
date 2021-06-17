@@ -3,8 +3,8 @@ kind: Kustomization
 bases:
 - ../base
 resources:
-# - ingress-tls.yml
-- ingress.yml
+- ingress-tls.yml
+# - ingress.yml
 namespace: mini2-prod
 patchesStrategicMerge:
 - set-replicas.yml
