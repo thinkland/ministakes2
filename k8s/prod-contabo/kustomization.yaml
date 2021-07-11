@@ -3,6 +3,7 @@ kind: Kustomization
 bases:
 - ../base
 resources:
+- namespace.yml
 - ingress-tls.yml
 # - ingress.yml
 namespace: mini2-prod
