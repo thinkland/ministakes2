@@ -12,9 +12,6 @@ env:
   IMAGE_NAME: jekyll1
   IMAGE_TAG: "build-${{ github.run_number }}"
   IMAGE_FULL: "ghcr.io/${{ github.actor }}/jekyll1:build-${{ github.run_number }}"   # env vars do not work?
-  K8S_CLUSTER_SERVER_1: https://202.61.228.230:16443
-  K8S_CLUSTER_CERT_1:   ${{ secrets.K8S_CLUSTER_CERT }}
-  K8S_USER_TOKEN_1:     ${{ secrets.K8S_USER_TOKEN }}
 
 jobs:
 
@@ -54,7 +51,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      NAMESPACE: prod
+      K8S_NAMESPACE: mini2
+      K8S_FOLDER:    k8s/prod-netcup
+      K8S_CLUSTER_SERVER_1: https://202.61.228.230:16443
+      K8S_CLUSTER_CERT_1:   ${{ secrets.K8S_CLUSTER_CERT }}
+      K8S_USER_TOKEN_1:     ${{ secrets.K8S_USER_TOKEN }}
 
     steps:
     - name: Checkout
@@ -81,11 +82,12 @@ jobs:
     # Deploy images secrets
     - name: Deploy image secrets
       run: |-
+        kubectl apply -f $K8S_FOLDER/namespace.yml
         kubectl create secret docker-registry regcred \
           --docker-server=$REG_NAME \
           --docker-username=$GH_USER \
           --docker-password=$REG_PASS \
-          --namespace $NAMESPACE \
+          --namespace $K8S_NAMESPACE \
           --dry-run=client --save-config -o yaml \
           | kubectl apply -f -
 
@@ -93,11 +95,11 @@ jobs:
     # before with: kubectl rollout status deployment/$DEPLOYMENT_NAME
     - name: Deploy to K8s cluster
       run: |-
-        cd k8s/prod-netcup
+        cd $K8S_FOLDER
         ../../kustomize edit set image jekyll1=$IMAGE_FULL
         ../../kustomize build | kubectl apply -f -
         ../../kustomize build
-        kubectl get all -o wide -n $NAMESPACE
+        kubectl get all -o wide -n $K8S_NAMESPACE
 
   #############################################################################
   deploy2:
