@@ -4,6 +4,6 @@ bases:
 - ../base
 resources:
 - ingress-tls.yml
-namespace: prod
+namespace: mini2
 patchesStrategicMerge:
 - set-replicas.yml
